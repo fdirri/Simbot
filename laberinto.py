@@ -77,18 +77,21 @@ if __name__ == "__main__":
     Laberinto.generarlaberinto(L)
 
 def func_variacion(frame):    
-# Funcion animacion:. Es llamada tantas veces como indique 'frames'. La variable 'frame' es muda (podria tener cualquier otro nombre) y va de #0 a 'frames'
-    matriz.set_array(L.data)       # Controla el color del arreglo
+    matriz.set_array(L.data)       # Sentencia que controla el color del arreglo
 
-fig, ax = pyplot.subplots()      # Primer argumento de FuncAnimation. Objeto de figura que se utiliza para obtener un grafico
+fig, ax = pyplot.subplots()      
 matriz = ax.matshow(L.data)        # Muestra un arreglo como una matriz en una nueva figura
 
 
 ani = animation.FuncAnimation(fig, func_variacion, frames=10, interval=500, repeat=False) 
-# Funcion animacion. Esta funcion se llama recursivamente tantas veces como establezca 'frames'. FuncAnimation repite todo el proceso #indefinidamente a menos que le indiquemos lo contrario, con repeat=False. 'Interval' determina el tiempo entre una imagen y la siguiente.
+"""animation.FuncAnimation: Funcion que genera la animacion. Sus argumentos son:
+fig: Objeto de figura que se utiliza para obtener un grafico.
+func_variacion: Esta función es la que genera la variacion en el objeto que queremos modificar. Es llamada tantas veces como indique la variable 'frames' en animation.FuncAnimation. La variable 'frame' es muda (podria tener cualquier otro nombre) y va de 0 a 'frames'.
+frames: Establece el número total de imagenes que se van a mostrar.
+interval: Tiempo trasncurrido entre un frame y el siguiente.
+repeat: Variable logica. La funcion animation.FuncAnimation repite todo el proceso indefinidamente a menos que establezcamos que repeat vale false."""
 
 pyplot.show() 
 
-#figura( [5,5] )
 
 
