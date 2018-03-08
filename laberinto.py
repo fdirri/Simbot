@@ -42,7 +42,7 @@ class Laberinto(object):
     complejidad: Parametro que controla la dificultad del laberinto generado.
     densidad:Parametro que controla la cantidad de paredes generadas.
     """
-    def generarlaberinto(self,columnas=5, filas=5, complejidad=105.95, densidad=.75):
+    def generarlaberinto(self,columnas=15, filas=15, complejidad=0.95, densidad=4.75):
         if self.existelaberinto() == 'FALSE':
             
             """
@@ -67,7 +67,7 @@ class Laberinto(object):
             """
             self.data[0, :] = self.data[-1, :] = 1
             self.data[:, 0] = self.data[:, -1] = 1
-            self.data[1, 0] = 3 
+            self.data[1, 1] = 3 
 	    self.data[-1, -2] = 5
             
             """
@@ -131,52 +131,62 @@ if __name__ == "__main__":
   
     L=Laberinto()
     Laberinto.generarlaberinto(L)
+       # Sentencia que controla el color del arreglo
 #######################################################
-    r=Robot([1,0])
+    r=Robot([1,1])
     right=[0,1]
     left=[0,-1]
-    up=[1,0]
-    down=[-1,0]
-    front= [1,0]
+    up=[-1,0]
+    down=[1,0]
+    front= [0,1]
     '''Asignacion de la posicion inicial (en forma matricial) y frente inicial (en forma cartesiana) del robot'''
-    while (L.data[tuple(r.pos)] != 5):
+    while (L.data[tuple(np.add(r.pos,front))] != 5):
       ''' Criterios para tomar decicionens y buscar la salida'''
-      if(L.data[tuple(np.add(r.pos,up))]==1 and L.data[tuple(np.add(r.pos,right))]==0 and front == right):
+      if(L.data[tuple(np.add(r.pos,up))]==1 and (L.data[tuple(np.add(r.pos,right))]==0 or L.data[tuple(np.add(r.pos,right))]==3) and front == right):
            L.data[tuple(r.avanzar(r.pos,front))] = 3
-           r.pos=tuple(np.add(r.pos,r.avanzar(r.pos,front)))
-      elif (L.data[tuple(np.add(r.pos,right))] == 1 and L.data[tuple(np.add(r.pos , down))] == 0 and front == down):
+      elif (L.data[tuple(np.add(r.pos,right))] == 1 and (L.data[tuple(np.add(r.pos , down))] == 0 or L.data[tuple(np.add(r.pos,down))]==3) and front == down):
            L.data[tuple(r.avanzar(r.pos,front))]=3
-           r.pos=tuple(np.add(r.pos,r.avanzar(r.pos,front)))
-      elif(L.data[tuple(np.add(r.pos,down))] == 1 and L.data[tuple(np.add(r.pos ,left))] == 0 and front == left):
+      elif(L.data[tuple(np.add(r.pos,down))] == 1 and (L.data[tuple(np.add(r.pos ,left))] == 0 or L.data[tuple(np.add(r.pos,left))]==3) and front == left):
            L.data[tuple(r.avanzar(r.pos,front))]=3
-           r.pos=tuple(np.add(r.pos,r.avanzar(r.pos,front)))
-      elif(L.data[tuple(np.add(r.pos,left))] == 1 and L.data[tuple(np.add(r.pos ,up))] == 0 and front == up):
+      elif(L.data[tuple(np.add(r.pos,left))] == 1 and (L.data[tuple(np.add(r.pos ,up))] == 0 or L.data[tuple(np.add(r.pos,up))]==3) and front == up):
            L.data[tuple(r.avanzar(r.pos,front))]=3
-           r.pos=tuple(np.add(r.pos,r.avanzar(r.pos,front)))
-      elif (L.data[tuple(np.add(r.pos,up))] == 1 and L.data[tuple(np.add(r.pos,right))] == 1 and front == right):
+      elif (L.data[tuple(np.add(r.pos,up))] == 1 and (L.data[tuple(np.add(r.pos,right))] == 1 or L.data[tuple(np.add(r.pos,right))] == 3) and front == right):
             front = down 
-      elif (L.data[tuple(np.add(r.pos,right))] == 1 and L.data[tuple(np.add(r.pos ,down))] == 1 and front ==down):
+      elif (L.data[tuple(np.add(r.pos,right))] == 1 and (L.data[tuple(np.add(r.pos ,down))] == 1 or L.data[tuple(np.add(r.pos,down))] == 3)  and front ==down):
             front = left
-      elif (L.data[tuple(np.add(r.pos,down))] == 1 and L.data[tuple(np.add(r.pos,left))] == 1 and front==left):
+      elif (L.data[tuple(np.add(r.pos,down))] == 1 and (L.data[tuple(np.add(r.pos,left))] == 1 or L.data[tuple(np.add(r.pos,left))] == 3) and front==left):
             front = up
-      elif  (L.data[tuple(np.add(r.pos,left))] == 1 and L.data[tuple(np.add(r.pos, up))] == 1 and front == up):
+      elif  (L.data[tuple(np.add(r.pos,left))] == 1 and (L.data[tuple(np.add(r.pos, up))] == 1 or L.data[tuple(np.add(r.pos,up))] == 3) and front == up):
             front = right
+###########################################################
+      elif (L.data[tuple(np.add(r.pos,right))] == 0 and (L.data[tuple(np.add(r.pos,left))] == 1 or L.data[tuple(np.add(r.pos,left))] == 3) and front == down):
+            front = right
+      elif (L.data[tuple(np.add(r.pos,left))] == 3 and (L.data[tuple(np.add(r.pos,up))] == 1 or L.data[tuple(np.add(r.pos,left))] == 3) and front == up):
+            front = left   
+      
+###########################################################
       else: print "Esta todo considerado (?)"
-      print L.data 
+      print L.data
+      print r.pos, front 
+      print L.data[tuple(np.add(r.pos,up))],L.data[tuple(np.add(r.pos,right))]
       #print L.data
       #print r.pos
-      
+
+  
 ########################################################
 
- #   def func_variacion(frame):    
+    def func_variacion(frame):    
         
-  #      matriz.set_array(L.data)       # Sentencia que controla el color del arreglo
+        matriz.set_array(L.data)
+    fig, ax = pyplot.subplots()
+    matriz = ax.matshow(L.data)
+    ani = animation.FuncAnimation(fig, func_variacion, frames=10, interval=1500, repeat=False)   
 
-   # fig, ax = pyplot.subplots()      
-    #matriz = ax.matshow(L.data)        # Muestra un arreglo como una matriz en una nueva figura
+        # Muestra un arreglo como una matriz en una nueva figura
+
+          
 
 
-    #ani = animation.FuncAnimation(fig, func_variacion, frames=10, interval=500, repeat=False) 
     """animation.FuncAnimation: Funcion que genera la animacion. Sus argumentos son:
     fig: Objeto de figura que se utiliza para obtener un grafico.
     func_variacion: Esta funcion es la que genera la variacion en el objeto que queremos modificar. Es llamada tantas veces como indique la
@@ -186,7 +196,7 @@ if __name__ == "__main__":
     repeat: Variable logica. La funcion animation.FuncAnimation repite todo el proceso indefinidamente a menos que establezcamos que repeat
     vale false."""
 
-   # pyplot.show() 
+    pyplot.show() 
 
 
 
