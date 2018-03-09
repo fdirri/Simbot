@@ -42,7 +42,7 @@ class Laberinto(object):
     complejidad: Parametro que controla la dificultad del laberinto generado.
     densidad:Parametro que controla la cantidad de paredes generadas.
     """
-    def generarlaberinto(self,columnas=15, filas=15, complejidad=0.95, densidad=4.75):
+    def generarlaberinto(self,columnas=100, filas=100, complejidad=0.95, densidad=4.75):
         if self.existelaberinto() == 'FALSE':
             
             """
@@ -68,7 +68,7 @@ class Laberinto(object):
             self.data[0, :] = self.data[-1, :] = 1
             self.data[:, 0] = self.data[:, -1] = 1
             self.data[1, 1] = 3 
-	    self.data[-1, -2] = 5
+	    self.data[25, 0] = 5
             
             """
             Genero los pasillos
@@ -140,30 +140,42 @@ if __name__ == "__main__":
     down=[1,0]
     front= [0,1]
     '''Asignacion de la posicion inicial (en forma matricial) y frente inicial (en forma cartesiana) del robot'''
-    while (L.data[tuple(np.add(r.pos,front))] != 5):
+    while (L.data[tuple(np.add(r.pos,up))] != 5 and L.data[tuple(np.add(r.pos,down))] != 5 and L.data[tuple(np.add(r.pos,right))] != 5 and L.data[tuple(np.add(r.pos,left))] != 5):
       ''' Criterios para tomar decicionens y buscar la salida'''
-      if(L.data[tuple(np.add(r.pos,up))]==1 and (L.data[tuple(np.add(r.pos,right))]==0 or L.data[tuple(np.add(r.pos,right))]==3) and front == right):
+      if(L.data[tuple(np.add(r.pos,up))]==1 and (L.data[tuple(np.add(r.pos,right))]==0 or L.data[tuple(np.add(r.pos,right))]==3 or L.data[tuple(np.add(r.pos,right))]==5) and front == right):
            L.data[tuple(r.avanzar(r.pos,front))] = 3
-      elif (L.data[tuple(np.add(r.pos,right))] == 1 and (L.data[tuple(np.add(r.pos , down))] == 0 or L.data[tuple(np.add(r.pos,down))]==3) and front == down):
+      elif (L.data[tuple(np.add(r.pos,right))] == 1 and (L.data[tuple(np.add(r.pos , down))] == 0 or L.data[tuple(np.add(r.pos,down))]==3 or L.data[tuple(np.add(r.pos,down))]==5) and front == down):
            L.data[tuple(r.avanzar(r.pos,front))]=3
-      elif(L.data[tuple(np.add(r.pos,down))] == 1 and (L.data[tuple(np.add(r.pos ,left))] == 0 or L.data[tuple(np.add(r.pos,left))]==3) and front == left):
+      elif(L.data[tuple(np.add(r.pos,down))] == 1 and (L.data[tuple(np.add(r.pos ,left))] == 0 or L.data[tuple(np.add(r.pos,left))]==3 or L.data[tuple(np.add(r.pos,left))]==5) and front == left):
            L.data[tuple(r.avanzar(r.pos,front))]=3
-      elif(L.data[tuple(np.add(r.pos,left))] == 1 and (L.data[tuple(np.add(r.pos ,up))] == 0 or L.data[tuple(np.add(r.pos,up))]==3) and front == up):
+      elif(L.data[tuple(np.add(r.pos,left))] == 1 and (L.data[tuple(np.add(r.pos ,up))] == 0 or L.data[tuple(np.add(r.pos,up))]==3 or L.data[tuple(np.add(r.pos,up))]==5) and front == up):
            L.data[tuple(r.avanzar(r.pos,front))]=3
-      elif (L.data[tuple(np.add(r.pos,up))] == 1 and (L.data[tuple(np.add(r.pos,right))] == 1 or L.data[tuple(np.add(r.pos,right))] == 3) and front == right):
+      elif (L.data[tuple(np.add(r.pos,up))] == 1 and L.data[tuple(np.add(r.pos,right))] == 1 and front == right):
             front = down 
-      elif (L.data[tuple(np.add(r.pos,right))] == 1 and (L.data[tuple(np.add(r.pos ,down))] == 1 or L.data[tuple(np.add(r.pos,down))] == 3)  and front ==down):
+      elif (L.data[tuple(np.add(r.pos,right))] == 1 and L.data[tuple(np.add(r.pos ,down))] == 1  and front ==down):
             front = left
-      elif (L.data[tuple(np.add(r.pos,down))] == 1 and (L.data[tuple(np.add(r.pos,left))] == 1 or L.data[tuple(np.add(r.pos,left))] == 3) and front==left):
+      elif (L.data[tuple(np.add(r.pos,down))] == 1 and L.data[tuple(np.add(r.pos,left))] == 1 and front==left):
             front = up
-      elif  (L.data[tuple(np.add(r.pos,left))] == 1 and (L.data[tuple(np.add(r.pos, up))] == 1 or L.data[tuple(np.add(r.pos,up))] == 3) and front == up):
+      elif  (L.data[tuple(np.add(r.pos,left))] == 1 and L.data[tuple(np.add(r.pos, up))] == 1 and front == up):
             front = right
+      elif ((L.data[tuple(np.add(r.pos,up))] == 0 or L.data[tuple(np.add(r.pos,up))] == 3 or L.data[tuple(np.add(r.pos,up))] == 5) and (L.data[tuple(np.add(r.pos,right))] == 1 or L.data[tuple(np.add(r.pos,right))]==0 or L.data[tuple(np.add(r.pos,right))]==3) and front == right):
+            front = up 
+            L.data[tuple(r.avanzar(r.pos,front))]=3
+      elif ((L.data[tuple(np.add(r.pos,right))] == 0 or L.data[tuple(np.add(r.pos,right))] == 3 or L.data[tuple(np.add(r.pos,right))] == 5) and (L.data[tuple(np.add(r.pos,down))] == 1 or L.data[tuple(np.add(r.pos,down))] == 0 or L.data[tuple(np.add(r.pos,down))] == 3) and front == down):
+            front = right 
+            L.data[tuple(r.avanzar(r.pos,front))]=3
+      elif ((L.data[tuple(np.add(r.pos,down))] == 0 or L.data[tuple(np.add(r.pos,down))] == 3 or L.data[tuple(np.add(r.pos,down))] == 5) and (L.data[tuple(np.add(r.pos,left))] == 1 or L.data[tuple(np.add(r.pos,left))] == 0 or L.data[tuple(np.add(r.pos,left))] == 3) and front == left):
+            front = down 
+            L.data[tuple(r.avanzar(r.pos,front))]=3
+      elif ((L.data[tuple(np.add(r.pos,left))] == 0 or L.data[tuple(np.add(r.pos,left))] == 3 or L.data[tuple(np.add(r.pos,left))] == 5) and (L.data[tuple(np.add(r.pos,up))] == 1 or L.data[tuple(np.add(r.pos,up))] == 0 or L.data[tuple(np.add(r.pos,up))] == 3)   and front == up):
+            front = left 
+            L.data[tuple(r.avanzar(r.pos,front))]=3
 ###########################################################
-      elif (L.data[tuple(np.add(r.pos,right))] == 0 and (L.data[tuple(np.add(r.pos,left))] == 1 or L.data[tuple(np.add(r.pos,left))] == 3) and front == down):
-            front = right
-      elif (L.data[tuple(np.add(r.pos,left))] == 3 and (L.data[tuple(np.add(r.pos,up))] == 1 or L.data[tuple(np.add(r.pos,left))] == 3) and front == up):
-            front = left   
-      
+#      elif (L.data[tuple(np.add(r.pos,right))] == 0 and (L.data[tuple(np.add(r.pos,left))] == 1 or L.data[tuple(np.add(r.pos,left))] == 3) and front == down):
+#            front = right
+#      elif (L.data[tuple(np.add(r.pos,left))] == 3 and (L.data[tuple(np.add(r.pos,up))] == 1 or L.data[tuple(np.add(r.pos,left))] == 3) and front == up):
+#            front = left   
+#      
 ###########################################################
       else: print "Esta todo considerado (?)"
       print L.data
